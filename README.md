@@ -23,7 +23,7 @@ The system:
 tight-oil well economics in the Williston Basin (North Dakota / Montana).
 
 **Problem it solves:** First-year production is the primary driver of well economics.
-Estimating it before drilling — based only on planned completion design — allows
+Estimating it before drilling - based only on planned completion design - allows
 teams to screen locations, optimise frac design, and set realistic production
 forecasts without waiting for analogue well data.
 
@@ -77,10 +77,10 @@ touches the training data.
 **Files used:**
 | File | Description |
 |---|---|
-| `monthly_production.csv` | Monthly oil/gas/water per well — primary data source |
+| `monthly_production.csv` | Monthly oil/gas/water per well - primary data source |
 | `well_headers.csv` | Completion parameters (supplementary merge) |
 
-**Target variable:** `cum_oil_12mo` — sum of `Monthly Oil` for producing months 1–12 per well (BBL)
+**Target variable:** `cum_oil_12mo` - sum of `Monthly Oil` for producing months 1-12 per well (BBL)
 
 **Dataset size after preprocessing:** 20,601 horizontal oil wells with complete 12-month production history (filtered from 4,243,618 raw monthly records across 29,598 unique wells)
 
@@ -155,7 +155,7 @@ source .env       # or: export $(cat .env | xargs)
 
 ## Usage
 
-### Step 1 — Train all models
+### Step 1 - Train all models
 
 ```bash
 python src/train.py --config configs/config.yaml
@@ -169,14 +169,14 @@ To skip preprocessing if `data/ml_ready.csv` already exists:
 python src/train.py --config configs/config.yaml --skip-preprocess
 ```
 
-### Step 2 — View experiment results (optional)
+### Step 2 - View experiment results (optional)
 
 ```bash
 mlflow ui --backend-store-uri mlruns
 # Open http://localhost:5000 in your browser
 ```
 
-### Step 3 — Launch the advisor
+### Step 3 - Launch the advisor
 
 ```bash
 python src/app.py --run-id <best_run_id_from_step_1>
@@ -186,7 +186,7 @@ python src/app.py --run-id <best_run_id_from_step_1>
 
 ## Running with Docker (Optional)
 
-The entire pipeline can also run inside a container — useful for reproducing
+The entire pipeline can also run inside a container - useful for reproducing
 results without managing a local Python environment.
 
 ```bash
@@ -222,9 +222,9 @@ docker run --rm -it \
    estimates approximately 78,000 BBL of first-year cumulative oil production.
 
    Key factors driving this prediction:
-   • First-month production (8,500 BBL) — a strong indicator of well quality
+   • First-month production (8,500 BBL) - a strong indicator of well quality
    • Six-month decline trend implied by your month 1-3 data
-   • Lateral length (10,500 ft) — above the basin median of ~9,200 ft
+   • Lateral length (10,500 ft) - above the basin median of ~9,200 ft
 
    Bakken context:
    • P50 (median well): ~70,000 BBL first year
@@ -238,7 +238,7 @@ docker run --rm -it \
 > **Note:** Predictions made *without* early production data (`oil_month_1/2/3`)
 > rely only on static completion parameters and are noticeably less precise,
 > since those early-production features are the model's strongest predictors.
-> This is expected and documented behavior — see Results Summary below.
+> This is expected and documented behavior - see Results Summary below.
 
 ### Edge case examples
 
@@ -257,7 +257,7 @@ docker run --rm -it \
 🧑 You: 10,000 ft lateral, Three Forks
         (missing: Total Proppant)
 🤖 Advisor: I need a bit more information. Could you provide:
-            • Total Proppant (lbs) — e.g. 10,000,000 lbs or "10MM lbs"
+            • Total Proppant (lbs) - e.g. 10,000,000 lbs or "10MM lbs"
 ```
 
 ### Run the EDA notebook
@@ -293,20 +293,20 @@ Bakken Basin dataset (~21,000 horizontal oil wells):
 > observed across runs; exact values can be reproduced by running
 > `mlflow ui --backend-store-uri mlruns` and inspecting each run.
 
-**Best model:** `xgboost_deep` — selected by `mlflow.search_runs()` ranked on `test_r2`
+**Best model:** `xgboost_deep` - selected by `mlflow.search_runs()` ranked on `test_r2`
 **Best run ID:** `a11e46bc78bc4bd98e2fe38e064b14c8`
-**Test R²: 0.9619** — the model explains ~96% of the variance in first-year
+**Test R²: 0.9619** - the model explains ~96% of the variance in first-year
 cumulative oil production on held-out wells it never saw during training.
 
 **Top 3 most important features** (from XGBoost feature importances):
-1. `oil_month_1` — first-month IP is the single strongest predictor of full-year production
-2. `cum_oil_6mo` — six-month cumulative captures early hyperbolic decline
-3. `DI Lateral Length` — completion design drives long-term recovery
+1. `oil_month_1` - first-month IP is the single strongest predictor of full-year production
+2. `cum_oil_6mo` - six-month cumulative captures early hyperbolic decline
+3. `DI Lateral Length` - completion design drives long-term recovery
 
-**Key finding:** Early production data (months 1–3) explains more variance than
+**Key finding:** Early production data (months 1-3) explains more variance than
 static completion parameters alone. When early production is not yet available
 (pre-drill prediction, before a well has been completed), predictions rely
-solely on `Total Proppant`, `DI Lateral Length`, and `Reservoir` — and are
+solely on `Total Proppant`, `DI Lateral Length`, and `Reservoir` - and are
 noticeably less precise. This is expected: the model was trained to use whatever
 signal is available, and early flowback data is a much stronger signal than
 planned completion design alone. A pre-drill-only model (see Reflection) would
@@ -346,7 +346,7 @@ bakken-ml/
 
 ### What I learned
 Building this project clarified how much of production ML work lives outside
-the model itself — in preprocessing pipelines that are robust to messy real-world
+the model itself - in preprocessing pipelines that are robust to messy real-world
 data, in experiment tracking that makes runs reproducible, and in interfaces that
 make model outputs accessible to non-technical users. Wiring the LLM as a
 parsing and explanation layer rather than a "chatbot" was a particularly useful
@@ -356,8 +356,8 @@ neither does the other's job.
 ### What was challenging
 The most difficult part was building `preprocess.py`. The raw data is a
 time-series (one row per well per month), but the model needs one row per well.
-Correctly pivoting 12 months of production into engineered features — cumulative
-windows, decline rates, normalised IP — while preserving data integrity across
+Correctly pivoting 12 months of production into engineered features - cumulative
+windows, decline rates, normalised IP - while preserving data integrity across
 train and test splits required careful design to avoid target leakage.
 
 The LLM parsing step also required iteration: the prompt needed to be precise
@@ -373,7 +373,7 @@ than silent null inputs.
 - **Streamlit UI:** Wrap `BakkenAdvisor` in a Streamlit app with a clean web
   interface and a map view of well locations
 - **Uncertainty quantification:** Add prediction intervals using quantile
-  regression or conformal prediction — a P10/P50/P90 range is far more useful
+  regression or conformal prediction - a P10/P50/P90 range is far more useful
   to operators than a point estimate
 - **Pre-drill mode:** A separate model trained only on static completion
   parameters (no early production data) for true pre-drill screening
@@ -382,4 +382,4 @@ than silent null inputs.
 
 ## License
 
-MIT License — see `LICENSE` for details.
+MIT License - see `LICENSE` for details.
