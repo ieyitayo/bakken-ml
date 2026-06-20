@@ -1,0 +1,132 @@
+# ─────────────────────────────────────────────────────────────
+# configs/config.yaml
+# All training hyperparameters and settings for Bakken Basin
+# first-year oil production model.
+#
+# Edit this file to change any hyperparameter — never hardcode
+# values in train.py.
+# ─────────────────────────────────────────────────────────────
+
+# ── Data ──────────────────────────────────────────────────────
+data:
+  raw_path:        "data/Bakken Basin Well Monthly Production.CSV"
+  processed_path:  "data/ml_ready.csv"
+  encoders_path:   "data/encoders.pkl"
+  scaler_path:     "data/scaler.pkl"
+  test_size:       0.20        # fraction held out for evaluation
+  random_state:    42
+  log_transform_target: true   # train on log(cum_oil_12mo)
+  outlier_cap_pct:  0.99       # cap target at this percentile before training
+
+# ── MLflow ────────────────────────────────────────────────────
+mlflow:
+  experiment_name: "bakken_first_year_oil"
+  tracking_uri:    "mlruns"    # local directory; swap for remote URI if needed
+  artifact_path:   "model"
+
+# ── Feature columns used by all models ───────────────────────
+features:
+  numeric:
+    - "Total Proppant"
+    - "Total Fluid"
+    - "Gross Perforated Interval"
+    - "DI Lateral Length"
+    - "oil_month_1"
+    - "oil_month_2"
+    - "oil_month_3"
+    - "cum_oil_3mo"
+    - "cum_oil_6mo"
+    - "peak_monthly_oil"
+    - "decline_rate_m1_to_m6"
+    - "avg_gor_12mo"
+    - "oil_per_perf_ft_m1"
+    - "vintage_year"
+  categorical:
+    - "Reservoir"
+    - "DI Landing Zone"
+    - "Production Type"
+    - "Well Status"
+
+# ── Model configurations ──────────────────────────────────────
+# Each entry is one MLflow run. Add or remove entries freely.
+models:
+
+  # ── Run 1: Random Forest (baseline) ──
+  - name: "random_forest_baseline"
+    algorithm: "random_forest"
+    params:
+      n_estimators:     200
+      max_depth:        12
+      min_samples_leaf: 4
+      max_features:     "sqrt"
+      n_jobs:           -1
+      random_state:     42
+
+  # ── Run 2: Random Forest (deeper / more trees) ──
+  - name: "random_forest_deep"
+    algorithm: "random_forest"
+    params:
+      n_estimators:     500
+      max_depth:        20
+      min_samples_leaf: 2
+      max_features:     0.6
+      n_jobs:           -1
+      random_state:     42
+
+  # ── Run 3: Gradient Boosting (sklearn, conservative) ──
+  - name: "gradient_boosting_conservative"
+    algorithm: "gradient_boosting"
+    params:
+      n_estimators:     300
+      learning_rate:    0.05
+      max_depth:        4
+      min_samples_leaf: 10
+      subsample:        0.8
+      random_state:     42
+
+  # ── Run 4: Gradient Boosting (aggressive) ──
+  - name: "gradient_boosting_aggressive"
+    algorithm: "gradient_boosting"
+    params:
+      n_estimators:     500
+      learning_rate:    0.10
+      max_depth:        6
+      min_samples_leaf: 5
+      subsample:        0.9
+      random_state:     42
+
+  # ── Run 5: XGBoost (tuned) ──
+  - name: "xgboost_tuned"
+    algorithm: "xgboost"
+    params:
+      n_estimators:     600
+      learning_rate:    0.05
+      max_depth:        6
+      min_child_weight: 5
+      subsample:        0.8
+      colsample_bytree: 0.7
+      reg_alpha:        0.1
+      reg_lambda:       1.0
+      n_jobs:           -1
+      random_state:     42
+
+  # ── Run 6: XGBoost (deeper, less regularization) ──
+  - name: "xgboost_deep"
+    algorithm: "xgboost"
+    params:
+      n_estimators:     800
+      learning_rate:    0.03
+      max_depth:        8
+      min_child_weight: 3
+      subsample:        0.85
+      colsample_bytree: 0.8
+      reg_alpha:        0.0
+      reg_lambda:       0.5
+      n_jobs:           -1
+      random_state:     42
+
+# ── Evaluation thresholds ─────────────────────────────────────
+# Used by test_model.py to assert minimum acceptable performance
+evaluation:
+  min_r2:        0.60    # R² on held-out test set
+  max_rmse_pct:  0.40    # RMSE / mean(target) <= 40%

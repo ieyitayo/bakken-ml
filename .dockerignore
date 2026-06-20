@@ -1,0 +1,15 @@
+.git/
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+.pytest_cache/
+mlruns/
+mlartifacts/
+data/*.csv
+data/*.CSV
+data/*.pkl
+.env
+.ipynb_checkpoints/
+*.log

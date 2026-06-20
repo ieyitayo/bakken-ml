@@ -1,0 +1,4 @@
+# This file keeps the data/ directory tracked by Git.
+# Actual data files are excluded via .gitignore.
+# Raw data belongs in data/raw/
+# Processed data belongs in data/processed/
