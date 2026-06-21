@@ -1,4 +1,4 @@
-# 🛢️ Bakken Basin Production Advisor — Demo Script
+# 🛢️ Bakken Basin Production Advisor- Demo Script
 
 Use this script for your demo recording and for starting the app from scratch.
 
@@ -8,7 +8,7 @@ Use this script for your demo recording and for starting the app from scratch.
 
 Open PowerShell terminal in VS Code (`Ctrl + `` `) and run each block in order:
 
-### Step 1 — Activate virtual environment
+### Step 1: Activate virtual environment
 ```powershell
 .venv\Scripts\activate
 ```
@@ -16,7 +16,7 @@ Open PowerShell terminal in VS Code (`Ctrl + `` `) and run each block in order:
 
 ---
 
-### Step 2 — Set environment variables
+### Step 2: Set environment variables
 ```powershell
 $env:MLFLOW_ALLOW_FILE_STORE="true"
 $env:LLM_API_KEY="v1.CmQKHHN0YXRpY2tleS1lMDBmeGJyOHcwc2h6MTFjNTASIXNlcnZpY2VhY2NvdW50LWUwMG5qZmd3ZHYzYXlwOHllajIMCNaaqtEGEMzTs94BOgwI153CnAcQwJfosgFAAloDZTAw.AAAAAAAAAAHXOXHW-uQh7B-3ICoE0qnvxuTufAxw-X57GNo6jsoxiruV9MWX1OP4QJ6Ok1yrJAqZ-r48S34JPvB5wO1VISMH"
@@ -26,7 +26,7 @@ $env:LLM_MODEL="meta-llama/Llama-3.3-70B-Instruct"
 
 ---
 
-### Step 3 — Run the test suite (confirm 44 pass)
+### Step 3: Run the test suite (confirm 44 pass)
 ```powershell
 pytest tests/ -v
 ```
@@ -34,7 +34,7 @@ pytest tests/ -v
 
 ---
 
-### Step 4 — Launch the advisor
+### Step 4: Launch the advisor
 ```powershell
 python src/app.py --run-id ec6ed26878dd4d10b13deb53e83dd33a
 ```
@@ -46,7 +46,7 @@ python src/app.py --run-id ec6ed26878dd4d10b13deb53e83dd33a
 
 ### 🟢 Normal prediction (with early production data)
 ```
-I have a Middle Bakken well with a 10,500 ft lateral, 12 million lbs proppant,
+I have a Middle Bakken well with a 10,500 ft lateral, 12 million lbs of proppant,
 50,000 BBL fluid. First month production was 8,500 BBL, second month 6,200 BBL,
 third month 5,100 BBL. What is my first-year forecast?
 ```
@@ -54,7 +54,7 @@ third month 5,100 BBL. What is my first-year forecast?
 
 ---
 
-### 🟡 Edge case 1 — Greeting
+### 🟡 Edge case 1: Greeting
 ```
 Hello!
 ```
@@ -62,7 +62,7 @@ Hello!
 
 ---
 
-### 🟡 Edge case 2 — Off-topic query
+### 🟡 Edge case 2: Off-topic query
 ```
 What is the weather like in Williston today?
 ```
@@ -70,7 +70,7 @@ What is the weather like in Williston today?
 
 ---
 
-### 🟡 Edge case 3 — Missing required feature
+### 🟡 Edge case 3: Missing required feature
 ```
 I have a 10,500 ft lateral in the Middle Bakken with 50,000 BBL of fluid
 ```
@@ -123,7 +123,7 @@ Then open: http://localhost:5000
 | Problem | Fix |
 |---|---|
 | `(.venv)` not showing | Run `.venv\Scripts\activate` |
-| `401 Unauthorized` from LLM | API key expired — get new one from studio.nebius.com |
+| `401 Unauthorized` from LLM | API key expired-get new one from studio.nebius.com |
 | `404 model not exist` | Run `$env:LLM_MODEL="meta-llama/Llama-3.3-70B-Instruct"` |
 | `MLFLOW_ALLOW_FILE_STORE` error | Run `$env:MLFLOW_ALLOW_FILE_STORE="true"` before training |
 | Tests failing | Make sure you replaced all updated src/ and tests/ files |
