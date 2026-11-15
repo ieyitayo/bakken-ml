@@ -383,3 +383,21 @@ than silent null inputs.
 ## License
 
 MIT License - see `LICENSE` for details.
+
+
+Summary and Technical Recommendation
+Key Findings
+
+- Reservoir Model Confidence: The base-case model remains the most defensible technical basis, supported by the available DST pressure data. Lower-volume cases show significant pressure mismatch and are not currently considered credible alternatives.
+
+- Well Optimization: The optimized 2–3 km horizontal-well configuration delivers approximately 24.7 MMBO unconstrained EUR from two wells, capturing approximately 95% of the best four-well modeled recovery (26 MMBO). Additional wells provide limited incremental recovery.
+
+- Flow Assurance Constraint: Applying a 5 kbopd turndown rate reduces the two-well recoverable volume to approximately 12.7 MMBO, representing a 49% reduction from unconstrained recovery.
+
+- Development Implications: At 12.7 MMBO, the two-well concept remains economically challenged. The constrained recovery is significantly below the approximately 24–25 MMBO target identified during economic screening.
+
+- Remaining Uncertainties: Achievable flowing BHP, wellhead pressure, receiving-system backpressure, flowline turndown requirements, and potential artificial-lift solutions remain unresolved.
+
+Technical Position and Recommendation
+
+The optimized two-well configuration remains the preferred subsurface development concept. However, the 5 kbopd turndown constraint materially reduces recoverable volumes and challenges development viability.
