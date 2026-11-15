@@ -383,5 +383,3 @@ than silent null inputs.
 ## License
 
 MIT License - see `LICENSE` for details.
-
-remains the preferred subsurface development concept. However, the 5 kbopd turndown constraint materially reduces recoverable volumes and challenges development viability.
